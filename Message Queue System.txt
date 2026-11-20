@@ -1,0 +1,89 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX 5
+
+// Structure for message
+struct Message {
+    char data[100];
+};
+
+// Queue structure
+struct Message queue[MAX];
+int front = -1, rear = -1;
+
+// Enqueue function
+void enqueue(char msg[]) {
+    if (rear == MAX - 1) {
+        printf("Queue Overflow! Cannot add message.\n");
+    } else {
+        if (front == -1) front = 0;
+        rear++;
+        strcpy(queue[rear].data, msg);
+        printf("Message added to queue.\n");
+    }
+}
+
+// Dequeue function
+void dequeue() {
+    if (front == -1 || front > rear) {
+        printf("Queue Underflow! No messages.\n");
+    } else {
+        printf("Removed Message: %s\n", queue[front].data);
+        front++;
+    }
+}
+
+// Display function
+void display() {
+    if (front == -1 || front > rear) {
+        printf("Queue is empty.\n");
+    } else {
+        printf("Messages in Queue:\n");
+        for (int i = front; i <= rear; i++) {
+            printf("%d: %s\n", i + 1, queue[i].data);
+        }
+    }
+}
+
+// Main function
+int main() {
+    int choice;
+    char message[100];
+
+    while (1) {
+        printf("\n--- Message Queue System ---\n");
+        printf("1. Enqueue (Add Message)\n");
+        printf("2. Dequeue (Remove Message)\n");
+        printf("3. Display Messages\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        getchar(); // clear buffer
+
+        switch (choice) {
+            case 1:
+                printf("Enter message: ");
+                fgets(message, sizeof(message), stdin);
+                message[strcspn(message, "\n")] = 0; // remove newline
+                enqueue(message);
+                break;
+
+            case 2:
+                dequeue();
+                break;
+
+            case 3:
+                display();
+                break;
+
+            case 4:
+                return 0;
+
+            default:
+                printf("Invalid choice!\n");
+        }
+    }
+
+    return 0;
+}
